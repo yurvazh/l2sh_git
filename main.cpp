@@ -6,7 +6,17 @@
 
 using namespace std;
 
-
+void change_file(){
+    int a;
+    cout << "Are you sure about changing the file?\n1 - yes, 0 - no.\n";
+    cin >> a;
+    if (a == 0)
+        return;
+    ofstream outf("questions.txt", ios::app);
+    string s;
+    cin >> s;
+    outf << s << endl;
+}
 void print_results() {
     ifstream cinf;
     cinf.open("output.txt");
@@ -59,7 +69,9 @@ int main() {
             if (choice == 2) {
                 print_results();
                 return 0;
-            } 
+            } else if (choice == 3) {
+                change_file();
+            }
         } else {
             getline(cin, ans[i]);
         }
