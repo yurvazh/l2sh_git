@@ -17,69 +17,68 @@ void change_file(){
     cin >> s;
     outf << s << endl;
 }
-
 void print_results() {
-    freopen("output.txt", "r", stdin);
-    string fN, lN, book;
-    vector<pair<pair<string, string>, string> > vec(0);
-    set<string> books;
-    int in;
-    cin >> in;
-    if (in == 1) {
-        while (cin >> fN >> lN >> book) {
-            vec.pb(mp(mp(fN, lN), book));
-            books.insert(book);
-        }
-        sort(vec.begin(), vec.end());
-        for (auto t : vec) {
-            cout << t.ft.ft << " " << t.ft.sd << ": " << t.sd << endl;
-        }
-    } else if (in == 2) {
-        while (cin >> fN >> lN >> book) {
-            vec.pb(mp(mp(lN, fN), book));
-            books.insert(book);
-        }
-        sort(vec.begin(), vec.end());
-        for (auto t : vec) {
-            cout << t.ft.sd << " " << t.ft.ft << ": " << t.sd << endl;
-        }
-    } else {
-        while (cin >> fN >> lN >> book) {
-            vec.pb(mp(mp(book, fN), lN));
-            books.insert(book);
-        }
-        sort(vec.begin(), vec.end());
-        for (auto t : vec) {
-            cout << t.ft.sd << " " << t.sd << ": " << t.ft.ft << endl;
+    ifstream cinf;
+    cinf.open("output.txt");
+    vector<vector<string>> ans(0);
+    string t;
+    while (getline(cinf, t)) {
+        ans.pb({""});
+        for (int i = 0; i < t.size(); i++) {
+            if (t[i] == ' ') {
+                ans.back().pb("");
+            } else {
+                ans.back().back().pb(t[i]);
+            }
         }
     }
-    cout << vec.size() << " " << books.size() << endl;
+    cinf.close();
+    int n = ans.size();
+    cout << "Выберите параметр сортировки: ";
+    int choice; cin >> choice;
+    vector<pair<string, vector<string>>> vec(n);
+    for (int i = 0; i < n; i++) {
+        vec[i] = mp(ans[i][choice - 1], ans[i]);
+    }
+    sort(vec.begin(), vec.end());
+    for (int i = 0; i < n; i++) {
+        for (auto s1 : vec[i].sd) {
+            cout << s1 << " ";
+        }
+        cout << endl;
+    }
 }
 
 int main() {
-    freopen("questions.txt", "r", stdin);
-    string q1, q2, q3, q4;
-    getline(cin, q1);
-    getline(cin, q2);
-    getline(cin, q3);
-    getline(cin, q4);
-    string fN, lN, book;
-    cout << q1 << " ";
-    int choice;
-    cin >> choice;
-    if (choice == 2) {
-        print_results();
-        return 0;
-    } else if (choice == 3){
-        change_file();
-        return 0;
+    vector<string> q(0);
+    string t;
+    int n = 0;
+    ifstream cinf;
+    cinf.open("questions.txt");
+    while (getline(cinf, t)) {
+        q.pb(t);
+        n++;
     }
-    cout << endl << q2 << " ";
-    cin >> fN;
-    cout << endl << q3 << " ";
-    cin >> lN;
-    cout << endl << q4 << " ";
-    cin >> book;
-    freopen("output.txt", "w", stdout);
-    cout << endl << fN << endl << lN << endl << book << endl;
+    cinf.close();
+    vector<string> ans(n);
+    int choice = 0;
+    for (int i = 0; i < n; i++) {
+        cout << q[i];
+        if (i == 0) {
+            cin >> choice;
+            if (choice == 2) {
+                print_results();
+                return 0;
+            } else if (choice == 3) {
+                change_file();
+            }
+        } else {
+            getline(cin, ans[i]);
+        }
+    }
+    ofstream coutf;
+    coutf.open("output.txt", ios::app);
+    for (int i = 1; i < n; i++) {
+        cout << ans[i] << " ";
+    }
 }
